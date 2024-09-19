@@ -2,11 +2,17 @@ import 'package:counter_test/counter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  ///Pretest
-  setUp((){});
-  setUpAll((){});
 
-/// Testing 
+  ///Pretest
+  setUp(() {});
+  setUpAll(() {});
+
+  /// set up is called before every test
+  /// set up all is called before all test
+  /// set up -> test-> set up ->test
+  /// set up all ->test ->test->test
+
+  /// Testing
   group('Test Counter class', () {
     test('Test counter is value is equal to 0', () {
       ///Assert
@@ -22,15 +28,22 @@ void main() {
     test('Test counter is increment function is increment ', () {
       ///Assert
       Counter counter = Counter();
+
       /// Act
       counter.increment();
       var value = counter.counter;
+
       /// Assert
       expect(value, 1);
     });
   });
 
-    ///Post Test
-  tearDown((){});
-  tearDownAll((){});
+  ///Post Test because is called after testing
+
+  ///called after every single test
+  tearDown(() {});
+  /// called after all test
+  tearDownAll(() {});
+  /// tearDown -> test-> set up ->test
+  /// tearDownAll ->test ->test->test
 }
