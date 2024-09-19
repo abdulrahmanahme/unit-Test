@@ -5,4 +5,7 @@ class Counter {
   void increment() {
     _counter++;
   }
+    void reset() {
+    _counter==0;
+  }
 }
