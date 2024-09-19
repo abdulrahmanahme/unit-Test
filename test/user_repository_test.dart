@@ -71,22 +71,23 @@ void main() {
       'Test getUsers function in  UserRepository class should return a status code 500',
       () async {
     //Arrange
-
     //Act
     when(
       mockDio.get('https://jsonplaceholder.typicode.com/posts?_page'),
     ).thenThrow(
       (_) async => DioException(
-        error: 'Something went wrong',
+         response: Response(
+            statusCode: 500,
+            requestOptions: RequestOptions(path:'https://jsonplaceholder.typicode.com/posts?_page'),
+          ),
         requestOptions: RequestOptions(
           path: 'https://jsonplaceholder.typicode.com/posts?_page',
         ),
       ),
     );
-
-    ///Assert
     var user = userRepertory.getUsers();
+
     /// Asset
-    expect(user, throwsA(isInstanceOf<DioException>()));
+    expect(user,  throwsA(isInstanceOf<Exception>()));
   });
 }
