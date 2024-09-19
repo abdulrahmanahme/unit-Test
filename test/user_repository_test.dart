@@ -1,20 +1,21 @@
 import 'package:counter_test/app_const.dart';
 import 'package:counter_test/user_model.dart';
 import 'package:counter_test/user_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'user_repository_test.mocks.dart';
 
-class ClientHTTPMock extends Mock implements Client {}
-
+@GenerateMocks([Dio])
 void main() {
   late UserRepository userRepertory;
-  late ClientHTTPMock clientHTTPMock;
+  late MockDio mockDio;
   late AppConst appConst;
 
   setUp(() {
-    clientHTTPMock = ClientHTTPMock();
-    userRepertory = UserRepository(clientHTTPMock);
+    mockDio = MockDio();
+    userRepertory = UserRepository(mockDio);
     appConst = AppConst();
   });
 
@@ -23,18 +24,40 @@ void main() {
         'Test getUsers function in  UserRepository class should return a status code 200',
         () async {
       ///Arrange
-
       ///Act
       when(
-        () => clientHTTPMock.get(
-          Uri.parse(
-            'https://jsonplaceholder.typicode.com/posts?_page',
-          ),
-        ),
+        mockDio.get('https://jsonplaceholder.typicode.com/posts?_page'),
       ).thenAnswer(
-        (invocation) async {
-          return Response(appConst.responseSuccess, 200);
-        },
+        (_) async => Response(
+          data: [
+            {
+              "userId": 1,
+              "id": 1,
+              "title":
+                  "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+              "body":
+                  "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+            },
+            {
+              "userId": 1,
+              "id": 2,
+              "title": "qui est esse",
+              "body":
+                  "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
+            },
+            {
+              "userId": 1,
+              "id": 3,
+              "title":
+                  "ea molestias quasi exercitationem repellat qui ipsa sit aut",
+              "body":
+                  "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
+            },
+          ],
+          statusCode: 200,
+          requestOptions: RequestOptions(
+              path: 'https://jsonplaceholder.typicode.com/posts?_page'),
+        ),
       );
 
       var user = await userRepertory.getUsers();
@@ -42,6 +65,28 @@ void main() {
       /// Asset
       expect(user, isA<List<User>>());
     });
+  });
 
+  test(
+      'Test getUsers function in  UserRepository class should return a status code 500',
+      () async {
+    //Arrange
+
+    //Act
+    when(
+      mockDio.get('https://jsonplaceholder.typicode.com/posts?_page'),
+    ).thenThrow(
+      (_) async => DioException(
+        error: 'Something went wrong',
+        requestOptions: RequestOptions(
+          path: 'https://jsonplaceholder.typicode.com/posts?_page',
+        ),
+      ),
+    );
+
+    ///Assert
+    var user = userRepertory.getUsers();
+    /// Asset
+    expect(user, throwsA(isInstanceOf<DioException>()));
   });
 }

@@ -2,7 +2,7 @@ import 'package:counter_test/user_model.dart';
 import 'package:counter_test/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
 
 class UserScreen extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserListState extends State<UserScreen> {
-  UserRepository userRepertory = UserRepository(Client());
+  UserRepository userRepertory = UserRepository(Dio());
 
   @override
   Widget build(BuildContext context) {

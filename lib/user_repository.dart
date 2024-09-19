@@ -1,19 +1,20 @@
 import 'package:counter_test/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:dio/dio.dart';
 
 class UserRepository {
-  UserRepository(this.client);
-  final http.Client client;
+  UserRepository(this.dio);
+  final Dio dio;
   Future<List<User>> getUsers() async {
     print('sssssssssaaa');
     try {
-      var response = await http
-          .get(Uri.parse('https://jsonplaceholder.typicode.com/posts?_page'));
+      var response =
+          await dio.get('https://jsonplaceholder.typicode.com/posts?_page');
       if (response.statusCode == 200) {
-        var convertBody =
-            convert.jsonDecode(response.body) as List<dynamic>;
-        return convertBody.map((json) => User.fromJson(json)).toList();
+        return (response.data as List<dynamic>)
+            .map((json) => User.fromJson(json))
+            .toList();
       } else {
         throw Exception('there an error');
       }
