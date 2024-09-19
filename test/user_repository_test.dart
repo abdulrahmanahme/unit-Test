@@ -1,6 +1,5 @@
-import 'package:counter_test/app_const.dart';
-import 'package:counter_test/user_model.dart';
-import 'package:counter_test/user_repository.dart';
+import 'package:counter_test/model/_model/user_model.dart';
+import 'package:counter_test/model/repos/user_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -11,12 +10,10 @@ import 'user_repository_test.mocks.dart';
 void main() {
   late UserRepository userRepertory;
   late MockDio mockDio;
-  late AppConst appConst;
 
   setUp(() {
     mockDio = MockDio();
     userRepertory = UserRepository(mockDio);
-    appConst = AppConst();
   });
 
   group('Test UserRepository class ', () {
@@ -76,10 +73,11 @@ void main() {
       mockDio.get('https://jsonplaceholder.typicode.com/posts?_page'),
     ).thenThrow(
       (_) async => DioException(
-         response: Response(
-            statusCode: 500,
-            requestOptions: RequestOptions(path:'https://jsonplaceholder.typicode.com/posts?_page'),
-          ),
+        response: Response(
+          statusCode: 500,
+          requestOptions: RequestOptions(
+              path: 'https://jsonplaceholder.typicode.com/posts?_page'),
+        ),
         requestOptions: RequestOptions(
           path: 'https://jsonplaceholder.typicode.com/posts?_page',
         ),
@@ -88,6 +86,6 @@ void main() {
     var user = userRepertory.getUsers();
 
     /// Asset
-    expect(user,  throwsA(isInstanceOf<Exception>()));
+    expect(user, throwsA(isInstanceOf<Exception>()));
   });
 }

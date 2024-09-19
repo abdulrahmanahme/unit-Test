@@ -1,13 +1,10 @@
-import 'package:counter_test/user_model.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import 'package:counter_test/model/user_model/user_model.dart';
 import 'package:dio/dio.dart';
 
 class UserRepository {
   UserRepository(this.dio);
   final Dio dio;
   Future<List<User>> getUsers() async {
-    print('sssssssssaaa');
     try {
       var response =
           await dio.get('https://jsonplaceholder.typicode.com/posts?_page');

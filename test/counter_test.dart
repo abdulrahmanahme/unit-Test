@@ -1,12 +1,12 @@
-import 'package:counter_test/counter.dart';
+import 'package:counter_test/model/repos/counter_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-    late  Counter counter ;
+    late  CounterRepository counter ;
 
   ///Pretest
   setUp(() {
-   counter = Counter();
+   counter = CounterRepository();
   });
   setUpAll(() {
   });

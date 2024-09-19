@@ -1,5 +1,5 @@
-import 'package:counter_test/user_model.dart';
-import 'package:counter_test/user_repository.dart';
+import 'package:counter_test/model/repos/user_repository.dart';
+import 'package:counter_test/model/user_model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dio/dio.dart';
